@@ -248,6 +248,12 @@ class QgisStacWidget(QtWidgets.QWidget, WidgetUi):
         Emits the search started signal to alert UI about the
         search operation.
         """
+        # make sure api client is updated
+        current_connection = settings_manager.get_current_connection()
+        self.api_client = Client.from_connection_settings(
+            current_connection
+        )
+
         self.search_type = ResourceType.FEATURE
         start_dte = self.start_dte.dateTime() \
             if not self.start_dte.dateTime().isNull() else None
