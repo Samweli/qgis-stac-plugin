@@ -41,10 +41,28 @@ class ResultItemDelegate(QtWidgets.QStyledItemDelegate):
 
         if isinstance(item, Item):
             item_widget = self.createEditor(self.parent, option, index)
+
+            painter.save()
+            if option.state & QtWidgets.QStyle.State_Selected:
+                painter.fillRect(option.rect, option.palette.highlight())
+
             item_widget.setGeometry(option.rect)
-            pixmap = item_widget.grab()
-            del item_widget
-            painter.drawPixmap(option.rect.x(), option.rect.y(), pixmap)
+
+            # item_widget.render(
+            #     painter.device(),
+            #     QtCore.QPoint(option.rect.x(), option.rect.y()),
+            #     QtGui.QRegion(0, 0, option.rect.width(), option.rect.height()),
+            #     QtWidgets.QWidget.RenderFlag.DrawChildren
+            # )
+
+            super().initStyleOption(option, index)
+            painter.drawPixmap(option.rect, item_widget.grab())
+            # item_widget.render(
+            #     painter.device(),
+            #     QtCore.QPoint(option.rect.x(), option.rect.y())
+            # )
+
+            painter.restore()
         else:
             super().paint(painter, option, index)
 

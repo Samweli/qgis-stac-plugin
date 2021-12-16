@@ -45,6 +45,7 @@ class ResultItemWidget(QtWidgets.QWidget, WidgetUi):
      showing the item thumbnail and adding footprint as
      a layer into QGIS.
     """
+    thumbnail_task_finished = QtCore.pyqtSignal()
 
     def __init__(
         self,
@@ -61,8 +62,8 @@ class ResultItemWidget(QtWidgets.QWidget, WidgetUi):
         self.cog_string = '/vsicurl/'
         self.main_widget = main_widget
         self.initialize_ui()
-        # if self.thumbnail_url:
-        #     self.add_thumbnail()
+        if self.thumbnail_url:
+            self.add_thumbnail()
 
     def initialize_ui(self):
         """ Populate UI inputs when loading the widget"""
@@ -94,7 +95,6 @@ class ResultItemWidget(QtWidgets.QWidget, WidgetUi):
                 self.thumbnail_url = asset.href
 
         self.assets_load_box.activated.connect(self.load_asset)
-        # self.assets_load_box.currentIndexChanged(self.load_asset)
 
     def update_inputs(self, enabled):
         self.assets_load_box.setEnabled(enabled)
@@ -175,11 +175,11 @@ class ResultItemWidget(QtWidgets.QWidget, WidgetUi):
         :param content: Network response data
         :type content: QByteArray
         """
-        thumbnail_image = QtGui.QImage.fromData(content)
-
-        if thumbnail_image:
-            thumbnail_pixmap = QtGui.QPixmap.fromImage(thumbnail_image)
-            self.thumbnail_la.setPixmap(thumbnail_pixmap)
+        thumbnail_loader = ThumbnailLoader(
+            content,
+            self.thumbnail_la
+        )
+        QgsApplication.taskManager().addTask(thumbnail_loader)
 
     def network_task(
             self,
