@@ -11,7 +11,7 @@ Site https://stac-utils.github.io/qgis-stac-plugin
 ### Installation
 
 During the development phase the plugin is available to install via 
-a dedicated plugin repository 
+a dedicated plugin repository
 https://stac-utils.github.io/qgis-stac-plugin/repository/plugins.xml
 
 Open the QGIS plugin manager, then select the **Settings** page, click **Add** 
@@ -45,7 +45,7 @@ install poetry, a python dependencies management tool see https://python-poetry.
 then using the poetry tool, update the poetry lock file and install plugin dependencies by running 
 ``` 
 poetry update --lock
-poetry install --no-dev
+poetry install
 ```
 
 To install the plugin into the QGIS application use the below command
