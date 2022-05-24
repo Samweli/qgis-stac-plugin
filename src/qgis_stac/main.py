@@ -13,9 +13,9 @@ import re
 import os.path
 
 from qgis.core import QgsSettings
-from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
+from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
+from qgis.PyQt.QtWidgets import QAction, QDockWidget
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -153,6 +153,18 @@ class QgisStac:
 
         return action
 
+    def _create_dock(self):
+        """Create dockwidget and tabify it with the legend."""
+        from safe.gui.widgets.dock import Dock
+        self.dock_widget = Dock(self.iface)
+        self.dock_widget.setObjectName('InaSAFE-Dock')
+        self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dock_widget)
+        legend_tab = self.iface.mainWindow().findChild(QApplication, 'Legend')
+        if legend_tab:
+            self.iface.mainWindow().tabifyDockWidget(
+                legend_tab, self.dock_widget)
+            self.dock_widget.raise_()
+
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
         icon_path = ":/plugins/qgis_stac/icon.png"
@@ -171,6 +183,13 @@ class QgisStac:
             add_to_toolbar=False,
         )
 
+        self.add_action(
+            icon_path,
+            text=self.tr(u"Dock Widget"),
+            callback=self.dock,
+            parent=self.iface.mainWindow(),
+        )
+
     def onClosePlugin(self):
         """Cleanup necessary items here when plugin widget is closed"""
         self.pluginIsActive = False
@@ -180,6 +199,13 @@ class QgisStac:
         for action in self.actions:
             self.iface.removePluginMenu(self.tr(u"&STAC API Browser Plugin"), action)
             self.iface.removeToolBarIcon(action)
+
+    def dock(self):
+        dock = QDockWidget("Plugin Dock", self.iface.mainWindow())
+        dock.setAllowedAreas(Qt.LeftDockWidgetArea | Qt.RightDockWidgetArea)
+        main_widget = QgisStacWidget(dock)
+        dock.setWidget(main_widget)
+        self.iface.mainWindow().addDockWidget(Qt.RightDockWidgetArea, dock)
 
     def run(self):
         self.main_widget.show()
