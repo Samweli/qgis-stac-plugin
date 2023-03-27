@@ -265,7 +265,7 @@ class ConnectionDialog(QtWidgets.QDialog, DialogUi):
             capability=capability,
             conformances=self.conformance,
             created_date=datetime.datetime.now(),
-            auth_config=self.auth_config.configId(),
+            auth_config=self.auth_config_select.configId(),
             search_items=search_items,
             sas_subscription_key=sas_subscription_key,
         )
@@ -280,7 +280,7 @@ class ConnectionDialog(QtWidgets.QDialog, DialogUi):
         """
         self.name_edit.setText(connection_settings.name)
         self.url_edit.setText(connection_settings.url)
-        self.auth_config.setConfigId(connection_settings.auth_config)
+        self.auth_config_select.setConfigId(connection_settings.auth_config)
         self.page_size.setValue(connection_settings.page_size)
         capability_index = self.capabilities.findText(
             connection_settings.capability.value
@@ -313,7 +313,7 @@ class ConnectionDialog(QtWidgets.QDialog, DialogUi):
             sas_subscription_key=sas_subscription_key,
             conformances=self.conformance,
             created_date=datetime.datetime.now(),
-            auth_config=self.auth_config.configId(),
+            auth_config=self.auth_config_select.configId(),
             search_items=[]
         )
         existing_connection_names = []

@@ -232,7 +232,7 @@
        </widget>
       </item>
       <item row="2" column="1" colspan="2">
-       <widget class="QgsAuthConfigSelect" name="auth_config">
+       <widget class="QgsAuthConfigSelect" name="auth_config_select">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
           <horstretch>0</horstretch>

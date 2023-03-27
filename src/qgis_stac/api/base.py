@@ -30,6 +30,8 @@ from ..conf import ConnectionSettings
 
 from ..lib.pystac import ItemCollection
 
+from ..utils import log
+
 
 class BaseClient(QtCore.QObject):
     """ Base API client, defines main plugin content fetching operations
@@ -112,6 +114,7 @@ class BaseClient(QtCore.QObject):
         used in querying the STAC items
         :type item_search: ItemSearch
         """
+        log(f"Used url from base {self.url}")
         self.content_task = ContentFetcherTask(
             url=self.url,
             search_params=item_search,

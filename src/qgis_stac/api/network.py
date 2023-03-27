@@ -66,6 +66,7 @@ class ContentFetcherTask(QgsTask):
     api_capability: ApiCapability
     response_handler: typing.Callable
     error_handler: typing.Callable
+    auth_config: str
 
     response = None
     error = None
@@ -80,6 +81,7 @@ class ContentFetcherTask(QgsTask):
             api_capability: ApiCapability = None,
             response_handler: typing.Callable = None,
             error_handler: typing.Callable = None,
+            auth_config: str = None,
     ):
         super().__init__()
         self.url = url
@@ -98,6 +100,7 @@ class ContentFetcherTask(QgsTask):
         """
         try:
             self.client = Client.open(self.url)
+            log(f"Used url {self.url}")
             if self.resource_type == \
                     ResourceType.FEATURE:
                 if self.search_params:
